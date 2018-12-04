@@ -4,7 +4,11 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const router = express.Router();
+
+// Auth
 const localStrategy = require('./passport/local');
+const jwtStrategy = require('./passport/jwt');
 
 // DB
 const { PORT, MONGODB_URI } = require('./config');
@@ -19,8 +23,12 @@ const authRouter = require('./routes/auth');
 // Create an Express application
 const app = express();
 
-// Use passport strategy
+// Use passport strategies
 passport.use(localStrategy);
+passport.use(jwtStrategy);
+
+// Protect endpoints using JWT Strategy
+router.use('/', passport.authenticate('jwt', { session: false, failWithError: true }));
 
 // Log all requests. Skip logging during
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
