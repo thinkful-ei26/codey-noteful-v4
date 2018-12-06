@@ -11,10 +11,6 @@ const app = require('../server');
 const Tag = require('../models/tag');
 const User = require('../models/user');
 const Note = require('../models/note');
-<<<<<<< HEAD
-const { notes, tags } = require('../db/data');
-=======
->>>>>>> solution/3-multiuser
 const { TEST_MONGODB_URI } = require('../config');
 
 const { notes, tags, users } = require('../db/data');
@@ -31,24 +27,16 @@ describe('Noteful API - Tags', function () {
     return mongoose.connect(TEST_MONGODB_URI, { useNewUrlParser: true, useCreateIndex : true })
       .then(() => Promise.all([
         Note.deleteMany(),
-<<<<<<< HEAD
-        Tag.deleteMany()
-=======
         Tag.deleteMany(),
         User.deleteMany()
->>>>>>> solution/3-multiuser
       ]));
   });
 
   beforeEach(function () {
     return Promise.all([
       Tag.insertMany(tags),
-<<<<<<< HEAD
-      Note.insertMany(notes)
-=======
       Note.insertMany(notes),
       User.insertMany(users)
->>>>>>> solution/3-multiuser
     ]);
   });
 
@@ -56,12 +44,8 @@ describe('Noteful API - Tags', function () {
     sandbox.restore();
     return Promise.all([
       Note.deleteMany(),
-<<<<<<< HEAD
-      Tag.deleteMany()
-=======
       Tag.deleteMany(),
       User.deleteMany()
->>>>>>> solution/3-multiuser
     ]);
   });
 
