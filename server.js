@@ -4,7 +4,6 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const router = express.Router();
 
 // Auth
 const localStrategy = require('./passport/local');
@@ -23,13 +22,6 @@ const authRouter = require('./routes/auth');
 // Create an Express application
 const app = express();
 
-// Use passport strategies
-passport.use(localStrategy);
-passport.use(jwtStrategy);
-
-// Protect endpoints using JWT Strategy
-router.use('/', passport.authenticate('jwt', { session: false, failWithError: true }));
-
 // Log all requests. Skip logging during
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
   skip: () => process.env.NODE_ENV === 'test'
@@ -41,12 +33,18 @@ app.use(express.static('public'));
 // Parse request body
 app.use(express.json());
 
+// Use passport strategies
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 // Mount routers
 app.use('/api/notes', notesRouter);
 app.use('/api/folders', foldersRouter);
 app.use('/api/tags', tagsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api', authRouter);
+
+
 
 // Custom 404 Not Found route handler
 app.use((req, res, next) => {
@@ -69,7 +67,7 @@ app.use((err, req, res, next) => {
 // Listen for incoming connections
 if (require.main === module) {
   // Connect to DB and Listen for incoming connections
-  mongoose.connect(MONGODB_URI)
+  mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex : true })
     .then(instance => {
       const conn = instance.connections[0];
       console.info(`Connected to: mongodb://${conn.host}:${conn.port}/${conn.name}`);
