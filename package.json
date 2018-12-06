@@ -9,6 +9,7 @@
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js",
+<<<<<<< HEAD
 		"test": "cross-env NODE_ENV=test mocha",
 		"cover": "nyc --reporter=lcov --reporter=text-summary npm test"
 	},
@@ -17,10 +18,24 @@
 		"express": "^4.16.4",
 		"mongoose": "^5.3.7",
 		"morgan": "^1.9.0"
+=======
+		"test": "cross-env NODE_ENV=test mocha"
+	},
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"dotenv": "^6.2.0",
+		"express": "^4.16.4",
+		"jsonwebtoken": "^8.3.0",
+		"mongoose": "^5.3.8",
+		"morgan": "^1.9.1",
+		"passport": "^0.4.0",
+		"passport-jwt": "^4.0.0",
+		"passport-local": "^1.0.0"
+>>>>>>> solution/3-multiuser
 	},
 	"devDependencies": {
-		"chai": "^4.1.2",
-		"chai-http": "^4.0.0",
+		"chai": "^4.2.0",
+		"chai-http": "^4.2.0",
 		"cross-env": "^5.1.6",
 		"mocha": "^5.2.0",
 		"nyc": "^13.1.0",
