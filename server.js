@@ -1,5 +1,6 @@
 'use strict';
 
+// Lib
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -9,6 +10,7 @@ const { PORT, MONGODB_URI } = require('./config');
 const localStrategy = require('./passport/local');
 const jwtStrategy = require('./passport/jwt');
 
+// Routes
 const notesRouter = require('./routes/notes');
 const foldersRouter = require('./routes/folders');
 const tagsRouter = require('./routes/tags');
