@@ -1,5 +1,4 @@
 'use strict';
-
 // Lib
 const express = require('express');
 const morgan = require('morgan');
@@ -22,6 +21,13 @@ const authRouter = require('./routes/auth');
 
 // Create an Express application
 const app = express();
+
+// Use passport strategies
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
+// Protect endpoints using JWT Strategy
+router.use('/', passport.authenticate('jwt', { session: false, failWithError: true }));
 
 // Log all requests. Skip logging during
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
