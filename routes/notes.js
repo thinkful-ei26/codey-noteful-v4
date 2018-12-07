@@ -7,27 +7,6 @@ const Note = require('../models/note');
 const Folder = require('../models/folder');
 const Tag = require('../models/tag');
 
-function validateFolderId(folderId, userId) {
-  if (folderId === undefined) {
-    return Promise.resolve();
-  }
-
-  if (!mongoose.Types.ObjectId.isValid(folderId)) {
-    const err = new Error('The `folderId` is not valid');
-    err.status = 400;
-    return Promise.reject(err);
-  }
-
-  return Folder.countDocuments({ _id: folderId, userId })
-    .then(count => {
-      if (count === 0) {
-        const err = new Error('The `folderId` is not valid');
-        err.status = 400;
-        return Promise.reject(err);
-      }
-    });
-}
-
 function validateTagIds(tags, userId) {
   if (tags === undefined) {
     return Promise.resolve();
