@@ -7,26 +7,26 @@ const Note = require('../models/note');
 const Folder = require('../models/folder');
 const Tag = require('../models/tag');
 
-// function validateFolderId(folderId, userId) {
-//   if (folderId === undefined) {
-//     return Promise.resolve();
-//   }
+function validateFolderId(folderId, userId) {
+  if (folderId === undefined) {
+    return Promise.resolve();
+  }
 
-//   if (!mongoose.Types.ObjectId.isValid(folderId)) {
-//     const err = new Error('The `folderId` is not valid');
-//     err.status = 400;
-//     return Promise.reject(err);
-//   }
+  if (!mongoose.Types.ObjectId.isValid(folderId)) {
+    const err = new Error('The `folderId` is not valid');
+    err.status = 400;
+    return Promise.reject(err);
+  }
 
-//   return Folder.countDocuments({ _id: folderId, userId })
-//     .then(count => {
-//       if (count === 0) {
-//         const err = new Error('The `folderId` is not valid');
-//         err.status = 400;
-//         return Promise.reject(err);
-//       }
-//     });
-// }
+  return Folder.countDocuments({ _id: folderId, userId })
+    .then(count => {
+      if (count === 0) {
+        const err = new Error('The `folderId` is not valid');
+        err.status = 400;
+        return Promise.reject(err);
+      }
+    });
+}
 
 function validateTagIds(tags, userId) {
   if (tags === undefined) {
@@ -122,14 +122,6 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-// folderId = empty string
-// folderId = invalid
-// folderId = valid mongo _id but does exist
-// folderId = folder belongs to another user
-
-// folderId = undefined
-// folderId = valid folder id which belong to current user
-
 const validateFolderId = function (folderId, userId) {
   if (folderId === undefined) {
     return Promise.resolve();
@@ -156,6 +148,7 @@ const validateFolderId = function (folderId, userId) {
       }
     });
 };
+
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
   const { title, content, folderId, tags } = req.body;
@@ -217,14 +210,14 @@ router.put('/:id', (req, res, next) => {
     toUpdate.$unset = { folderId: 1 };
   }
 
-  // Promise.all([
-  //   validateFolderId(toUpdate.folderId, userId),
-  //   validateTagIds(toUpdate.tags, userId)
-  // ])
-  // .then(() => {
-  //   return Note.findByIdAndUpdate(id, toUpdate, { new: true })
-  //     .populate('tags');
-  // })
+  Promise.all([
+    validateFolderId(toUpdate.folderId, userId),
+    validateTagIds(toUpdate.tags, userId)
+  ])
+  .then(() => {
+    return Note.findByIdAndUpdate(id, toUpdate, { new: true })
+      .populate('tags');
+  })
 
   validateFolderId(toUpdate.folderId, userId).
     then(() => {

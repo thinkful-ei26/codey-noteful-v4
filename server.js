@@ -6,9 +6,12 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-const { PORT, MONGODB_URI } = require('./config');
+// Auth
 const localStrategy = require('./passport/local');
 const jwtStrategy = require('./passport/jwt');
+
+// DB
+const { PORT, MONGODB_URI } = require('./config');
 
 // Routes
 const notesRouter = require('./routes/notes');
@@ -31,7 +34,7 @@ app.use(express.static('public'));
 // Parse request body
 app.use(express.json());
 
-// Utilize the given `strategy`
+// Use passport strategies
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
